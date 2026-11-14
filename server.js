@@ -11,32 +11,21 @@ app.get("/", (req, res) => {
     });
 });
 
-app.post("/join", (req, res) => {
-    const { placeId } = req.body;
 
-    if (!placeId || !/^\d+$/.test(String(placeId))) {
+app.post("/join", (req, res) => {
+    const placeId = req.body.placeId || "142823291";
+
+    if (!/^\d+$/.test(String(placeId))) {
         return res.status(400).json({
-            error: "Invalid Roblox Place ID"
+            error: "Invalid Place ID"
         });
     }
-
-    const launchUrl =
-        `roblox://placeId=${placeId}`;
-
-    const webUrl =
-        `https://www.roblox.com/games/${placeId}`;
 
     res.json({
         success: true,
         placeId,
-        launchUrl,
-        gameUrl: webUrl,
-        message: "Game launch link generated"
+        launchUrl: `roblox://placeId=${placeId}`,
+        gameUrl: `https://www.roblox.com/games/${placeId}`
     });
 });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`API running on port ${PORT}`);
-});
